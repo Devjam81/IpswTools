@@ -79,7 +79,8 @@ echo   *************************************************************************
 echo   *                 Download Tools please wait....                          *
 echo   ***************************************************************************
 title Download Tools...
-%toolbox%\wget -P %appdata%\IpswTools "http://downloads.sourceforge.net/project/ipswtools/tools.zip?r=&ts=1452077365&use_mirror=netcologne" 
+%toolbox%\wget -P %appdata%\IpswTools "http://netcologne.dl.sourceforge.net/project/ipswtools/tools.zip" 
+
 
 title Create Directory...
 IF not EXIST %UserProfile%\IpswTools  MKDIR %UserProfile%\IpswTools > NUL
@@ -1070,6 +1071,8 @@ ECHO Add SSH...
 %toolbox%\hfsplus.exe "%Version%_New\Root.dmg" untar %toolbox%\jb\openssl.tar
 echo.
 echo Done^^
+echo modification manuel...
+pause
 
 
 ECHO add Cydia ...
@@ -1090,6 +1093,7 @@ CALL %toolbox%\hfsplus.exe "%Version%_New\Root.dmg" symlink "/usr/libexec" "/pri
 CALL %toolbox%\hfsplus.exe "%Version%_New\Root.dmg" symlink "/usr/lib/pam" "/private/var/stash/pam" 1> NUL 2> NUL
 CALL %toolbox%\hfsplus.exe "%Version%_New\Root.dmg" symlink "/usr/share" "/private/var/stash/share" 1> NUL 2> NUL
 cls
+
 
    
 echo ReBuild please wait...      
