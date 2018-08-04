@@ -443,6 +443,11 @@ cls
 call %temp%\IpswTools\iPhoneWiki.bat > NUL
 cls
 
+
+echo - You have chosen Version ios 
+echo - Which version build? (e.g. 6.1.3)
+set /P Version=- Version: %=%
+
 mkdir "%Version%_Origine"2>NUL 
 
 set Version=%Version%
@@ -504,9 +509,10 @@ set /a $YPosImage=(%$HauteurCMD%/2)-(150/2)+%$TopYCMD%
 
 ::::// ICI LES PREPARATIFS POUR TON CODE \\::::
 
-echo Drag in an...
-Set /P IPSW=Move ipsw in the command prompt and ENTER !
-cls
+Echo  Drag in an...
+Echo Move ipsw in the command prompt!
+Set /P IPSW=
+
 
 
 ::::// AFFICHAGE DU FLASH D'ATTENTE \\::::
@@ -520,18 +526,18 @@ start %toolbox%\flash.exe "%toolbox%\5.swf" /flash /width 150 /heigth 150 /Xpos 
 
 ::::// ICI TU METS TON CODE (La partie traitement) \\::::
 
-
+echo on
 Echo Extracting ipsw wait...
 CALL %toolbox%\7za.exe x "%IPSW%" >> %logme%
 ECHO Done^^
-
+pause
 
 ECHO Copy Files...
 move "%Kernelcache%" "%Version%_Origine" >> %logme%
 move "*.dmg" "%Version%_Origine" >> %logme%
 move "*.plist" "%Version%_Origine" >> %logme%
 move "Firmware" "%Version%_Origine" >> %logme%
-cls
+pause
 
 ECHO Create Directory...
 mkdir "Decrypting" >> %logme%
@@ -913,6 +919,11 @@ ECHO Here is an example : Monarch
 SET %=% /P CodeName="CodeName: "
 ECHO Here is an example : 13A344
 SET %=% /P BuildVersion="BuildVersion: "
+
+SET Version=
+SET /p nom=Votre nom&#58;
+echo bonjour %nom%
+pause
 
 %toolbox%\curl.exe -k -LO http://theiphonewiki.com/w/index.php?title=%CodeName%_%BuildVersion%_(%ProductType%)^&action=edit > NUL
 Ren "index.php_title=%CodeName%_%BuildVersion%_(%ProductType%)&action=edit" "iPhoneWiki.bat" > NUL
