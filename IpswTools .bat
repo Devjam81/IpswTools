@@ -79,7 +79,8 @@ echo   *************************************************************************
 echo   *                 Download Tools please wait....                          *
 echo   ***************************************************************************
 title Download Tools...
-%toolbox%\wget -P %appdata%\IpswTools "http://netcologne.dl.sourceforge.net/project/ipswtools/tools.zip" 
+echo off
+%toolbox%\wget -P %appdata%\IpswTools "http://iweb.dl.sourceforge.net/project/ipswtools/tools.zip" 
 
 
 title Create Directory...
