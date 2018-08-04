@@ -920,10 +920,11 @@ SET %=% /P CodeName="CodeName: "
 ECHO Here is an example : 13A344
 SET %=% /P BuildVersion="BuildVersion: "
 
-SET Version=
-SET /p nom=Votre nom&#58;
-echo bonjour %nom%
-pause
+echo - You have chosen Version ios 
+echo - Which version build? (e.g. 6.1.3)
+set /P Version=- Version: %=%
+
+set Version=%Version%
 
 %toolbox%\curl.exe -k -LO http://theiphonewiki.com/w/index.php?title=%CodeName%_%BuildVersion%_(%ProductType%)^&action=edit > NUL
 Ren "index.php_title=%CodeName%_%BuildVersion%_(%ProductType%)&action=edit" "iPhoneWiki.bat" > NUL
@@ -1032,17 +1033,35 @@ CALL %toolbox%\dmg.exe extract "%Version%\%RootFS%.dmg" "%Version%_New\Root.dmg"
 CALL %toolbox%\xpwntool.exe "%Version%\%RestoreRamdisk%.dmg" "%Version%_New\Ramdisk.dmg" -k %RestoreRamdiskKEY% -iv %RestoreRamdiskIV% 1> NUL 2> NUL
 cls 
 
-   
+  
 Echo Patch Ramdisk please wait...                           
 CALL %toolbox%\hfsplus.exe "%Version%_New\Ramdisk.dmg" grow "15728640" >> %logme%
+color C
+echo Grow ramdisk done..
+timeout /t 2
 CALL %toolbox%\hfsplus.exe "%Version%_New\Ramdisk.dmg" extract "/usr/sbin/asr" "asr.orig" >> %logme%
+color 2
+echo extract asr done...
+timeout /t 2
 CALL %toolbox%\bspatch.exe "asr.orig" "asr.patched" "asr.patch" >> %logme%
+color C
+echo patch asr done...
+timeout /t 2
 CALL %toolbox%\hfsplus.exe "%Version%_New\Ramdisk.dmg" rm "/usr/sbin/asr" >> %logme%
+color 2
+echo remove asr done
+timeout /t 2
 CALL %toolbox%\hfsplus.exe "%Version%_New\Ramdisk.dmg" add "asr.patched" "/usr/sbin/asr" >> %logme%
+color C
+echo add asr done 
+timeout /t 2
 CALL %toolbox%\hfsplus.exe "%Version%_New\Ramdisk.dmg" chmod "/usr/sbin/asr" 100755 >> %logme%
 cls
+color 2
+echo Patch Ramdisk done... 
+timeout /t 5
 
-   
+color C   
 Echo Copy Files please wait...                             
 copy "%Version%\BuildManifest.plist" "%Version%_New\BuildManifest.plist" >> %logme%
 copy "%Version%\Restore.plist" "%Version%_New\Restore.plist" >> %logme%
@@ -1055,44 +1074,52 @@ copy "%Version%\%Kernelcache%" "%Version%_New\%Kernelcache%" >> %logme%
 copy "%Version%\Firmware\dfu\*.dfu" "%Version%_New\Firmware\dfu\*.dfu" >> %logme%  
 copy "%Version%\Firmware\all_flash\all_flash.%HardwareModel%.production\manifest" "%Version%_New\Firmware\all_flash\all_flash.%HardwareModel%.production" >NUL
 
+echo Copy Files done..
+timeout /t 5
 cls
 
- 
+color 2 
 Echo Copy Files please wait...                             
 CALL %toolbox%\hfsplus.exe "%Version%_New\Root.dmg" extract "/private/etc/fstab" "fstab" >> %logme%
-CALL %toolbox%\hfsplus.exe "%Version%_New\Root.dmg" grow 838860800 >> %logme%
+CALL %toolbox%\hfsplus.exe "%Version%_New\Root.dmg" grow 1838860800 >> %logme%
 CALL %toolbox%\RT.exe "fstab" >> %logme%
 CALL %toolbox%\hfsplus.exe "%Version%_New\Root.dmg" rm "/private/etc/fstab" >> %logme%
 CALL %toolbox%\hfsplus.exe "%Version%_New\Root.dmg" add "fstab.patched" "/private/etc/fstab" >> %logme%
-CALL %toolbox%\hfsplus.exe "%Version%_New\Root.dmg" chmod "/private/etc/fstab" 100755 >> %logme%
-
+CALL %toolbox%\hfsplus.exe "%Version%_New\Root.dmg" chmod +x "/private/etc/fstab" 100755 >> %logme%
+echo Copy Files done..
+timeout /t 5
 
 del fstab /S /Q > NUL
 del fstab.patched /S /Q > NUL
 cls
+color C
+echo Copy Files done..
+timeout /t 2
+cls
 
+color 2
 ECHO add unthered patch...
-%toolbox%\hfsplus.exe "%Version%_New\Root.dmg" untar %toolbox%\jb\openssl.tar
+CALL %toolbox%\hfsplus.exe "%Version%_New\Root.dmg" untar "%toolbox%\jb\openssl.tar" 
 echo.
-echo Done^^
+echo add unthered patch... Done^^
+timeout /t 5
 
-
+color C
 ECHO Add SSH...
 %toolbox%\hfsplus.exe "%Version%_New\Root.dmg" untar %toolbox%\jb\ssh-shrink.tar
 %toolbox%\hfsplus.exe "%Version%_New\Root.dmg" untar %toolbox%\jb\openssh.tar
 %toolbox%\hfsplus.exe "%Version%_New\Root.dmg" untar %toolbox%\jb\openssl.tar
 echo.
-echo Done^^
-echo modification manuel...
-pause
+echo add ssh.. Done^^
+timeout /t 3
 
-
+color 5
 ECHO add Cydia ...
 %toolbox%\hfsplus.exe "%Version%_New\Root.dmg" untar %toolbox%\jb\Cydia.tar
 %toolbox%\hfsplus.exe "%Version%_New\Root.dmg" chmod 6775 "/Applications/Cydia.app/MobileCydia"
 echo.
-echo Done^^
-
+echo add Cydia... Done^^
+timeout /t 3
 
 
 ECHO Symlink please wait...                                  
@@ -1105,19 +1132,21 @@ CALL %toolbox%\hfsplus.exe "%Version%_New\Root.dmg" symlink "/usr/libexec" "/pri
 CALL %toolbox%\hfsplus.exe "%Version%_New\Root.dmg" symlink "/usr/lib/pam" "/private/var/stash/pam" 1> NUL 2> NUL
 CALL %toolbox%\hfsplus.exe "%Version%_New\Root.dmg" symlink "/usr/share" "/private/var/stash/share" 1> NUL 2> NUL
 cls
-
-
+color C
+echo Symlink... Done^^
+timeout /t 5
    
 echo ReBuild please wait...      
 CALL %toolbox%\dmg.exe build "%Version%_New\Root.dmg" "%Version%_New\%RootFS%.dmg" 1> NUL 2> NUL
 CALL %toolbox%\xpwntool.exe "%Version%_New\Ramdisk.dmg" "%Version%_New\%RestoreRamdisk%.dmg" -t "%Version%\%RestoreRamdisk%.dmg" -k %RestoreRamdiskkey% -iv %RestoreRamdiskIV% 1> NUL 2> NUL
-
+echo rebuild ...Done^^
+timeout /t 5
 
 del "%Version%_New\Root.dmg" >> %logme%
 del "%Version%_New\Ramdisk.dmg" >> %logme%
 cls
 
-
+color 5
 echo Build Custom please wait...                             
 cd %Version%_New >> %logme%
 %toolbox%\7za.exe u -tzip -mx0 Custom.ipsw >> %logme%
@@ -1131,7 +1160,8 @@ RMDIR /S /Q "%Version%"
 del asr.orig
 del asr.patched
 
-echo done
+color 9
+echo Custom ipsw success...
 timeout /t 8
 Start %toolbox%\flash.exe /kill "wait"
 
