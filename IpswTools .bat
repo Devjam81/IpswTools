@@ -526,18 +526,18 @@ start %toolbox%\flash.exe "%toolbox%\5.swf" /flash /width 150 /heigth 150 /Xpos 
 
 ::::// ICI TU METS TON CODE (La partie traitement) \\::::
 
-echo on
+
 Echo Extracting ipsw wait...
 CALL %toolbox%\7za.exe x "%IPSW%" >> %logme%
 ECHO Done^^
-pause
+
 
 ECHO Copy Files...
 move "%Kernelcache%" "%Version%_Origine" >> %logme%
 move "*.dmg" "%Version%_Origine" >> %logme%
 move "*.plist" "%Version%_Origine" >> %logme%
 move "Firmware" "%Version%_Origine" >> %logme%
-pause
+
 
 ECHO Create Directory...
 mkdir "Decrypting" >> %logme%
