@@ -79,8 +79,10 @@ echo   *************************************************************************
 echo   *                 Download Tools please wait....                          *
 echo   ***************************************************************************
 title Download Tools...
-echo off
-%toolbox%\wget -P %appdata%\IpswTools "https://www.dropbox.com/s/6ax4z6t4sbaamwn/tools.zip?dl=0" 
+echo on
+%toolbox%\wget -P %appdata%\IpswTools "https://www.dropbox.com/s/6ax4z6t4sbaamwn/tools.zip?dl=0"
+ren "%appdata%\IpswTools\tools.zip?dl=0" "tools.zip"
+pause
 
 
 title Create Directory...
@@ -159,7 +161,7 @@ Echo.
 
 ::Search iTunes installed "Green" not installed "red"
 COLOR 0e
-SET Location=%ProgramFiles%\iTunes
+SET Location=%ProgramFiles% (x86)\iTunes
 SET FileName=iTunes.exe
 echo(  & ECHO Please Wait for moment .... Searching for "%FileName%" on "%Location%"
 TimeOut /T 3 /NoBreak  > Nul
