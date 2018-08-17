@@ -79,7 +79,7 @@ echo   *************************************************************************
 echo   *                 Download Tools please wait....                          *
 echo   ***************************************************************************
 title Download Tools...
-echo on
+echo off
 %toolbox%\wget -P %appdata%\IpswTools "https://www.dropbox.com/s/6ax4z6t4sbaamwn/tools.zip?dl=0"
 ren "%appdata%\IpswTools\tools.zip?dl=0" "tools.zip"
 pause
